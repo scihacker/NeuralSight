@@ -1,0 +1,82 @@
+#menu {
+    margin-left: -160px;
+    width: 160px;
+    position: fixed;
+    top: 0;
+    left: 160px;
+    bottom: 0;
+    z-index: 1000;
+    background: #191818;
+}
+
+#menu a {
+    color: #999;
+    border: none;
+    white-space: normal;
+    padding: 0.625em 1em;
+}
+
+#menu .pure-menu-heading {
+    font-size: 125%;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: #fff;
+    margin-top: 0;
+    padding: 0.5em 0.8em;
+}
+
+#menu .pure-menu ul {
+    border-top: 1px solid #333;
+}
+
+#menu .pure-menu-open {
+    background: transparent;
+    border: 0;
+}
+
+#menu .pure-menu-selected {
+    background: #1f8dd6;
+}
+
+#menu .pure-menu-selected a {
+    color: #fff;
+}
+
+#main {
+    padding-left: 160px;
+    text-align: center;
+}
+
+.header {
+    font-family: Helvetica, Arial, sans-serif;
+    margin: auto 5px;
+    padding: 1em;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    letter-spacing: 0.02em;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.content {
+    margin: auto 10px;
+    text-align: left;
+}
+
+#tag {
+    width: 50%;
+}
+
+#code {
+    width: 100%;
+    margin: 4px 0px;
+    height: 135px;
+    resize: none;
+}
+
+#use-button {
+    text-align: center;
+    margin-top: 3px;
+}

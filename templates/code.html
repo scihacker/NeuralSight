@@ -1,0 +1,49 @@
+﻿{% extends "main.html" %}
+{% block title %}开始{% endblock %}
+{% block code %}0{% endblock %}
+{% block header %}开始{% endblock %}
+{% block main %}
+<div class="content">
+    <p>要开始，请输入Code，或者在下面的列表中选取曾经使用过的Code。</p>
+    <form class="pure-form pure-form-stacked">
+        <fieldset>
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="tag">Tag (Optional)</label>
+                <input id="tag" type="text"{% if session.has_key("tag"): %}{{ ' value=' + session['tag'] }}{% endif %}>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="code">Code</label>
+                <textarea id="code" type="text">{% if session.has_key("code"): %}{{ session['code'] }}{% endif %}</textarea>
+            </div>
+            <div id="use-button" class="pure-u-1 pure-u-md-1-2">
+                <button type="button" id="use" class="pure-button pure-button-primary">使用</button>
+            </div>
+        </div>
+        </fieldset>
+    </form>
+    <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading">历史记录</a>
+        <ul id="history-code">
+            {% for code in history: %}
+            <li><a href="#" data-code="{{ code[1] }}">{{ code[0] }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<script>
+    var use_code = function(tag, code) {
+        $.post("/use_code", { tag: tag, code: code }, function() {
+            window.location.reload();
+        });
+    };
+    var use_code_button = function() {
+        use_code($("#tag").val(), $("#code").val());
+    };
+    var use_code_list = function() {
+        use_code($(this).text(), $(this).attr("data-code"));
+    };
+    $("#use").on("click", use_code_button);
+    $("#history-code a").on("click", use_code_list);
+</script>
+{% endblock %}

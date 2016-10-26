@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+<script src="{{ url_for('static', filename='jquery-3.1.1.min.js') }}"></script>
+</head>
+<body>
+<div id="menu">
+    <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading" href="/">NeuralSight</a>
+        <ul>
+            <li><a href="/code">开始</a></li>
+            <li><a href="/structure">网络结构</a></li>
+            <li><a href="/activation">响应可视化</a></li>
+            <li><a href="/filter">参数可视化</a></li>
+            <li><a href="/about">关于我们</a></li>
+        </ul>
+    </div>
+</div>
+<div id="main">
+<div class="header">
+    <h2>{% block header %}{% endblock %}</h2>
+</div>
+{% block main%}{% endblock %}
+</div>
+<script>
+<!-- 页面渲染问题 -->
+$("#menu ul li:eq({% block code %}{% endblock %})").addClass("pure-menu-selected");
+</script>
+</body>
+</html>
