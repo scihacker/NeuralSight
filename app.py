@@ -20,11 +20,11 @@ def code():
 def structure():
     if not session.has_key('code'):
         return render_template('error.html', page=1, exp=u"请在开始页面内使用Code！")
-    model = global_model.load_model(session['code'], session['data'])
-    if not model:
-        return render_template('error.html', page=1, exp=u"文件路径有误，无法读取网络模型！")
     path = content_model.get_architecture(session['code'])
     if not path:
+        model = global_model.load_model(session['code'], session['data'])
+        if not model:
+            return render_template('error.html', page=1, exp=u"文件路径有误，无法读取网络模型！")
         path = content_model.get_path_by_code(session['code'], "structure") + "arch.png"
         architecture_model.output_architecture(model, out_path=path)
     return render_template('structure.html', png=path)
