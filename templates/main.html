@@ -3,7 +3,7 @@
 <head>
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='pure-min.css') }}">
 <script src="{{ url_for('static', filename='jquery-3.1.1.min.js') }}"></script>
 </head>
 <body>
