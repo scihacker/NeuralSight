@@ -25,9 +25,9 @@ def structure():
         return render_template('error.html', page=1, exp=u"文件路径有误，无法读取网络模型！")
     path = content_model.get_architecture(session['code'])
     if not path:
-        path = content_model.get_path_by_code(session['code'], "structure")
-        architecture_model.output_architecture(model, out_path=path + "arch.png")
-    return render_template('structure.html', png=path + "arch.png")
+        path = content_model.get_path_by_code(session['code'], "structure") + "arch.png"
+        architecture_model.output_architecture(model, out_path=path)
+    return render_template('structure.html', png=path)
 
 @app.route("/use_code", methods=['POST'])
 def use_code():
