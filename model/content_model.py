@@ -2,7 +2,7 @@ import os
 from Crypto.Hash import SHA
 import base64
 
-content_path = "./content/"
+content_path = "./static/content/"
 def folder_adapter(name):
     import re
     return re.sub("[/]", "A", name)
@@ -21,8 +21,8 @@ def get_path_by_code(code, act):
 '''
 Neural Network Visualizations Below
 '''
-def architecture_exist(code):
+def get_architecture(code):
     path = get_path_by_code(code, "structure")
     if os.path.exists(path) and os.path.exists(path + "arch.png"):
-        return os.path.exists(path + "arch.png")
+        return path + "arch.png"
     return False

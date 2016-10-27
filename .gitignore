@@ -89,7 +89,7 @@ ENV/
 .ropeproject
 
 # Content
-content
+static/content
 
 # Secrets
 server_utils/secret

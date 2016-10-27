@@ -2,7 +2,7 @@ import os
 from Crypto.Cipher import AES
 import base64
 
-code_path = "./content/"
+code_path = "./static/content/"
 
 def get_full_code_history():
     file_path = code_path + "code_list.txt"
