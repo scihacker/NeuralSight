@@ -1,9 +1,9 @@
 #menu {
-    margin-left: -160px;
-    width: 160px;
+    margin-left: -200px;
+    width: 200px;
     position: fixed;
     top: 0;
-    left: 160px;
+    left: 200px;
     bottom: 0;
     z-index: 1000;
     background: #191818;
@@ -43,7 +43,7 @@
 }
 
 #main {
-    padding-left: 160px;
+    padding-left: 200px;
     text-align: center;
 }
 
@@ -79,4 +79,8 @@
 #use-button {
     text-align: center;
     margin-top: 3px;
+}
+
+#stop {
+    margin-left: 10px;
 }

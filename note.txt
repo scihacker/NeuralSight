@@ -1,0 +1,3 @@
+Code:
+AES encryption of the following structure:
+{"path": "<path>", "type":<keras|caffe|others>}

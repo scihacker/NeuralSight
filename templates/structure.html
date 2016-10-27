@@ -1,0 +1,14 @@
+﻿{% extends "main.html" %}
+{% block title %}网络结构{% endblock %}
+{% block code %}1{% endblock %}
+{% block header %}网络结构{% endblock %}
+{% block main %}
+<div class="content">
+    <p>下面是指定网络的网络层级结构：</p>
+    <p>Tag：{{ session['tag'] }}</p>
+    
+    <div class="structure-wrapper">
+        <img src="{{ png }}">
+    </div>
+</div>
+{% endblock %}
