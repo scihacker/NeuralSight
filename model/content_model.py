@@ -10,7 +10,7 @@ def folder_adapter(name):
 def get_hash_by_code(code):
     sha = SHA.new()
     sha.update(code)
-    return folder_adapter(base64.encodestring(sha.digest()).rstrip())
+    return folder_adapter(sha.hexdigest())
 
 def get_path_by_code(code, act):
     path = content_path + act + "/" + get_hash_by_code(code)
