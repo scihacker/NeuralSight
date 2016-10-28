@@ -32,14 +32,14 @@ def model_to_dot(model, show_shapes=False, show_layer_names=True):
             label = layer.__class__.__name__
         # Why not add something more here?
         if layer.__class__.__name__ == "Convolution2D":
-            label += "\nFilters: %d %d * %d %s" % (layer.nb_filter, layer.nb_row, layer.nb_col, layer.border_mode)
+            label += "\nFilters: %d * (%d * %d) %s" % (layer.nb_filter, layer.nb_row, layer.nb_col, layer.border_mode)
             label += "\n|Params:\n%d" % (layer.count_params())
         elif layer.__class__.__name__ == "Activation":
-            label += "\n%s" % (a.get_config()['activation'].capitalize())
+            label += "\n%s" % (layer.get_config()['activation'].capitalize())
         elif layer.__class__.__name__ == "MaxPooling2D":
-            layer += "\nPooling: %s Stride: %s" % (str(layer.pool_size), str(layer.strides[0]) if layer.strides[0] == layer.strides[1] else str(layer.strides))
+            label += "\nPooling: %s Stride: %s" % (str(layer.pool_size), str(layer.strides[0]) if layer.strides[0] == layer.strides[1] else str(layer.strides))
         elif layer.__class__.__name__ == "Dropout":
-            layer += "\nDropout: %d" % (layer.p, )
+            label += "\nDropout: %f" % (layer.p, )
         elif layer.__class__.__name__ == "Dense":
             label += "\n|Params:\n%d" % (layer.count_params())
         
@@ -47,14 +47,14 @@ def model_to_dot(model, show_shapes=False, show_layer_names=True):
             # Build the label that will actually contain a table with the
             # input/output
             try:
-                outputlabels = str(layer.output_shape)
+                outputlabels = str(layer.output_shape[1:])
             except:
                 outputlabels = 'multiple'
             if hasattr(layer, 'input_shape'):
                 inputlabels = str(layer.input_shape)
             elif hasattr(layer, 'input_shapes'):
                 inputlabels = ', '.join(
-                    [str(ishape) for ishape in layer.input_shapes])
+                    [str(ishape) for ishape in layer.input_shapes[1:]])
             else:
                 inputlabels = 'multiple'
             label = '%s\n|{input:|output:}|{{%s}|{%s}}' % (label, inputlabels, outputlabels)
