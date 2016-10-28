@@ -1,4 +1,3 @@
-from model import content_model
 try:
     import pydot_ng as pydot
 except ImportError:

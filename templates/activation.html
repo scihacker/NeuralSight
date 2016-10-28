@@ -1,0 +1,89 @@
+﻿{% extends "main.html" %}
+{% block title %}响应可视化{% endblock %}
+{% block code %}2{% endblock %}
+{% block header %}响应可视化{% endblock %}
+{% block main %}
+<div class="content">
+    <p>下面是所有网络层的可视化图片，请先上传输入图像，并点击相应的层级来查看该层的所有响应图：</p>
+    <p>（在未来版本中将采用图片池的方法，以方便使用。另由于Theano的机制问题，中间结果无法获得，就使得每一层都必须求一遍结果，所以很慢）</p>
+    <form class="pure-form" id="form" enctype="multipart/form-data">
+        <fieldset>
+            <input id="file" name="file" type="file" accept="image/png,image/jpeg">
+            <label for="filename">或者粘贴文件名：</label>
+            <input id="filename_input" type="text" name="file_name">
+            <input id="upload_file" type="button" class="pure-button pure-button-primary" value="确认">
+        </fieldset>
+    </form>
+    <p>Tag：{{ session['tag'] }} File: {{ session['image'] if session.has_key('image') else "Not Chosen"}}</p>
+    {% if session.has_key('image'): %}
+    <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading">网络层列表</a>
+        <ul>
+            {% for layer in layers: %}
+            <li id="layer{{ layer[0] }}" data-id="{{ layer[0] }}"{{ ' class=ready-layer' if layer[2] else '' }}><a href="#layer{{ layer[0] }}">{{ layer[1] }}</a></li>
+            <div class="activation-wrapper" style="width: 100%">
+                {% if activations[layer[0]] == 1: %}
+                    <img class='big-im' src='{{ "%s%s/1.png" % (path, layer[1]) }}'>
+                {% else: %}
+                {% for act in range(activations[layer[0]]): %}
+                    <img src='{{ "%s%s/%d.png" % (path, layer[1], act + 1) }}'>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+<script>
+    $("#upload_file").on("click", function() {
+        if ($("#file").val() != "") {
+            var formData = new FormData($("#form")[0]);
+            $.ajax({
+                url: "/upload_image",
+                type: "POST",
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function(result) { if (result.error != 0) { alert("上传失败！"); return; } alert("上传成功！"); window.location.reload(); }
+            });
+        }
+        else if ($("#filename_input").val() != "") {
+            $.ajax({
+                url: "/upload_image",
+                type: "POST",
+                data: { file_name: $("#filename_input").val() },
+                success: function(result) { if (result.error != 0) { alert("文件名不正确！"); return; } alert("文件名已确认！"); window.location.reload(); }
+            });
+        }
+    });
+    $("li").on("click", function() {
+        if ($(this).hasClass("ready-layer")) { 
+            $(this).next().toggle();
+            return;
+        }
+        var $this = $(this);
+        $.ajax({
+            url: "/compute_activation",
+            type: "POST",
+            data: { id: $(this).attr("data-id") },
+            success: function(result) { 
+                if (result.error != 0) { alert("更新输出失败！"); return; }
+                $this.addClass("ready-layer");
+                var dom = "";
+                if (result.count == 1) dom = "<img class='big-im' src='" + result.path + "1.png" + "'>";
+                else {
+                    for (var i = 0;i < result.count;i++)
+                    {
+                        dom += "<img src='" + result.path + (i + 1) + ".png" + "'>\n";
+                    }
+                }
+                $this.next().html(dom);
+                $this.next().toggle();
+            }
+        });
+    });
+</script>
+{% endblock %}

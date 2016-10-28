@@ -84,3 +84,21 @@
 #stop {
     margin-left: 10px;
 }
+
+.ready-layer {
+    font-weight: bolder;
+}
+
+.activation-wrapper {
+    display: none;
+    margin: 10px 20px;
+}
+
+.activation-wrapper img {
+    height: 100px;
+}
+
+.big-im {
+    height: auto!important;
+    width: 96%;
+}

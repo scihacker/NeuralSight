@@ -90,6 +90,7 @@ ENV/
 
 # Content
 static/content
+static/upload
 
 # Secrets
 server_utils/secret
