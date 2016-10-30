@@ -40,3 +40,17 @@ def get_activation(code, image, layers):
             layer[2] = True
             result[layer[0]] = len(os.listdir(path + "/" + layer[1]))
     return path + "/", result
+
+# Suppose all filter image in a layer is named from 1 ~ n
+def get_activation(code, layers):
+    path = get_path_by_code(code, "activation")
+    result = [0] * len(layers + 1)
+    if not os.path.exists(path):
+        os.mkdir(path)
+    for layer in layers:
+        if os.path.exists(path + "/" + layer[1]):
+            layer[2] = 2
+            if os.path.exists(path + "/" + layer[1] + "/ok"):
+                layer[2] = 1
+            result[layer[0]] = len(os.listdir(path + "/" + layer[1]))
+    return path + "/", result

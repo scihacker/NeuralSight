@@ -50,7 +50,7 @@ def filter():
         return render_template('error.html', page=2, exp=u"请在开始页面内使用Code！")
     model = global_model.load_model(session['code'], session['data'])
     layers = model.layers
-    out_layers = [[k, v.name, False] for k, v in enumerate(layers)]
+    out_layers = [[k, v.name, 0] for k, v in enumerate(layers)]
     out_layers = out_layers[1:]
     path, filter_list = content_model.get_filter(session['code'], out_layers)
     return render_template('filter.html', layers=out_layers, filters=filter_list, path=path)
@@ -64,6 +64,8 @@ def compute_filter():
     out_path = content_model.get_path_by_code(session['code'], "filter") + model.layers[layer_id].name + "/"
     def filter_thread():
         filter_model.compute_filter(model, layer_id, out_path)
+    t = threading.Thread(target=filter_thread)
+    t.start()
     return jsonify({"error": 0, "msg": "ok"})
 
 @app.route("/use_code", methods=['POST'])
