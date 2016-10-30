@@ -1,0 +1,47 @@
+﻿{% extends "main.html" %}
+{% block title %}响应可视化{% endblock %}
+{% block code %}3{% endblock %}
+{% block header %}响应可视化{% endblock %}
+{% block main %}
+<div class="content">
+    <p>下面是卷积核的可视化列表。请点击相应的卷积核再耐心等待很长时间，再打开浏览器查看。</p>
+    <p>Tag：{{ session['tag'] }}</p>
+    {% if session.has_key('image'): %}
+    <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading">网络层列表</a>
+        <ul>
+            {% for layer in layers: %}
+            <li id="layer{{ layer[0] }}" data-id="{{ layer[0] }}"{{ ' class=ready-layer' if layer[2] == 1 else (' class=wait-layer') if layer[2] == 2 else '' }}><a href="#layer{{ layer[0] }}">{{ layer[1] }}</a></li>
+            <div class="filter-wrapper" style="width: 100%">
+                {% for act in range(activations[layer[0]]): %}
+                    <img src='{{ "%s%s/%d.png" % (path, layer[1], act + 1) }}'>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+<script>
+    $("li").on("click", function() {
+        if ($(this).hasClass("ready-layer")) { 
+            $(this).next().toggle();
+            return;
+        }
+        if ($(this).hasClass("wait-layer")) {
+            return;
+        }
+        var $this = $(this);
+        $.ajax({
+            url: "/compute_filter",
+            type: "POST",
+            data: { id: $(this).attr("data-id") },
+            success: function(result) { 
+                if (result.error != 0) { alert("申请失败！"); return; }
+                $this.addClass("wait-layer");
+            }
+        });
+    });
+</script>
+{% endblock %}

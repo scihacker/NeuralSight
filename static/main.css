@@ -89,6 +89,10 @@
     font-weight: bolder;
 }
 
+.wait-layer {
+    background-color: yellow;
+}
+
 .activation-wrapper {
     display: none;
     margin: 10px 20px;

@@ -4,6 +4,7 @@ from flask import render_template, session, request, jsonify, redirect
 from model import code_model, global_model, architecture_model, content_model, activation_model
 import server_utils.secret.config as config
 import os
+import threading
 
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
@@ -37,12 +38,33 @@ def activation():
     if session.has_key('image'):
         model = global_model.load_model(session['code'], session['data'])
         layers = model.layers
-        print layers
         out_layers = [[k, v.name, False] for k, v in enumerate(layers)]
         path, activation_list = content_model.get_activation(session['code'], session['image'], out_layers)
     else:
         layers, activation_list, path = [], [], ""
     return render_template('activation.html', layers=out_layers, activations=activation_list, path=path)
+
+@app.route('/filter')
+def filter():
+    if not session.has_key('code'):
+        return render_template('error.html', page=2, exp=u"请在开始页面内使用Code！")
+    model = global_model.load_model(session['code'], session['data'])
+    layers = model.layers
+    out_layers = [[k, v.name, False] for k, v in enumerate(layers)]
+    out_layers = out_layers[1:]
+    path, filter_list = content_model.get_filter(session['code'], out_layers)
+    return render_template('filter.html', layers=out_layers, filters=filter_list, path=path)
+
+@app.route("/compute_filter", methods=['POST'])
+def compute_filter():
+    layer_id = int(request.form['id'])
+    if not session.has_key('code'):
+        return jsonify({"error": 1, "msg": "invalid use"})
+    model = global_model.load_model(session['code'], session['data'])
+    out_path = content_model.get_path_by_code(session['code'], "filter") + model.layers[layer_id].name + "/"
+    def filter_thread():
+        filter_model.compute_filter(model, layer_id, out_path)
+    return jsonify({"error": 0, "msg": "ok"})
 
 @app.route("/use_code", methods=['POST'])
 def use_code():
