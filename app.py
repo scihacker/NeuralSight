@@ -47,7 +47,7 @@ def activation():
 @app.route('/filter')
 def filter():
     if not session.has_key('code'):
-        return render_template('error.html', page=2, exp=u"请在开始页面内使用Code！")
+        return render_template('error.html', page=3, exp=u"请在开始页面内使用Code！")
     model = global_model.load_model(session['code'], session['data'])
     layers = model.layers
     out_layers = [[k, v.name, 0] for k, v in enumerate(layers)]
