@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*- 
 from flask import Flask
 from flask import render_template, session, request, jsonify, redirect
-from model import code_model, global_model, architecture_model, content_model, activation_model
+from model import code_model, global_model, architecture_model, content_model, activation_model, filter_model
 import server_utils.secret.config as config
 import os
 import threading
@@ -41,7 +41,7 @@ def activation():
         out_layers = [[k, v.name, False] for k, v in enumerate(layers)]
         path, activation_list = content_model.get_activation(session['code'], session['image'], out_layers)
     else:
-        layers, activation_list, path = [], [], ""
+        out_layers, activation_list, path = [], [], ""
     return render_template('activation.html', layers=out_layers, activations=activation_list, path=path)
 
 @app.route('/filter')

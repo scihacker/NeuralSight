@@ -4,7 +4,7 @@ import os
 from keras import backend as K
 
 image_path = "./static/upload/"
-def compute_activation(model, layer_id, out_path, size=(224, 224)):
+def compute_filter(model, layer_id, out_path, size=(224, 224)):
     if os.path.exists(out_path + "ok"):
         return
     if not os.path.exists(out_path):
@@ -29,20 +29,32 @@ def compute_activation(model, layer_id, out_path, size=(224, 224)):
         return x / (K.sqrt(K.mean(K.square(x))) + 1e-5)
 
     filters = []
-    for filter_index in range(layer.nb_filter):
+    for filter_index in range(layer.output_shape[1]):
         layer_output = layer.output
         loss = K.mean(layer_output[:, filter_index, :, :])
         grads = K.gradients(loss, input_img)[0]
         grads = normalize(grads)
 
-        iterate = K.function([input_img], [loss, grads])
+        iterate = K.function([input_img, K.learning_phase()], [loss, grads])
         step = 1.
         input_img_data = np.random.random((1, 3, im_width, im_height))
 
+        last_loss_value, last_diff, stop_mult = 0, -np.inf, False
         for i in range(20):
-            loss_value, grads_value = iterate([input_img_data])
+            loss_value, grads_value = iterate([input_img_data, 0])
             input_img_data += grads_value * step
-            print('Current loss value:', loss_value)
+            if i == 1:
+                step *= 2
+            if i > 1 and not stop_mult:
+                if (loss_value - last_loss_value > last_diff) and step < 100000: 
+                    step *= 2
+                elif i >= 5:
+                    step /= 2
+                    stop_mult = True
+            if i >= 1:
+                last_diff = loss_value - last_loss_value
+            last_loss_value = loss_value
+            print('Current loss value:', loss_value, 'step:', step)
 
         img = deprocess_image(input_img_data[0])
         filters.append((img, loss_value))
@@ -51,3 +63,9 @@ def compute_activation(model, layer_id, out_path, size=(224, 224)):
         plt.imsave(out_path + str(i + 1) + ".png", filters[i][0])
     with open(out_path + "ok", 'w') as f:
         f.write("ok")
+
+def compute_all_filter(model, out_path):
+    for i, layer in enumerate(model.layers):
+        if layer.__class__.__name__ == "BatchNormalization" or layer.__class__.__name__ == "Merge":
+            print "Current:", i
+            compute_filter(model, i, out_path + layer.name + "/")

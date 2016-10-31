@@ -102,6 +102,15 @@
     height: 100px;
 }
 
+.filter-wrapper img {
+    height: 100px;
+}
+
+.filter-wrapper {
+    display: none;
+    margin: 10px 20px;    
+}
+
 .big-im {
     height: auto!important;
     width: 96%;

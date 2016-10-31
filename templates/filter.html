@@ -11,12 +11,11 @@
         <a class="pure-menu-heading">网络层列表</a>
         <ul>
             {% for layer in layers: %}
-            <li id="layer{{ layer[0] }}" data-id="{{ layer[0] }}"{{ ' class=ready-layer' if layer[2] == 1 else (' class=wait-layer') if layer[2] == 2 else '' }}><a href="#layer{{ layer[0] }}">{{ layer[1] }}</a></li>
+            <li id="layer{{ layer[0] }}" data-id="{{ layer[0] }}"{{ ' class=ready-layer' if layer[2] == 1 else (' class=wait-layer' if layer[2] == 2 else '') }}><a href="#layer{{ layer[0] }}">{{ layer[1] }}</a></li>
             <div class="filter-wrapper" style="width: 100%">
-                {% for act in range(activations[layer[0]]): %}
+                {% for act in range(filters[layer[0]]): %}
                     <img src='{{ "%s%s/%d.png" % (path, layer[1], act + 1) }}'>
                 {% endfor %}
-                {% endif %}
             </div>
             {% endfor %}
         </ul>
