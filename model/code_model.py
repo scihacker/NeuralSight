@@ -8,15 +8,14 @@ def get_full_code_history():
     file_path = code_path + "code_list.txt"
     result = None
     with open(file_path, 'r') as f:
-        result = [line.split(' ') for line in f.readlines()]
-        result.reverse()
+        result = [line.strip().split(' ') for line in f.readlines() if line != '']
     return result
 
 def save_code_history(lst):
     file_path = code_path + "code_list.txt"
     with open(file_path, 'w') as f:
         for k in lst:
-            f.write("%s %s\n" % (k[0], k[1]))
+            f.write("%s %s\n" % (k[0], k[1].rstrip()))
 
 def encrypt_code(data, key, IV):
     # data = {"path":<path>, "type":<keras|caffe|others>}

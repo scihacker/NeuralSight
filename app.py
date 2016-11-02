@@ -71,6 +71,7 @@ def compute_filter():
 @app.route("/use_code", methods=['POST'])
 def use_code():
     tag, code_str = request.form['tag'], request.form['code']
+    code_str = code_str.strip()
     try:
         data = code_model.decrypt_code(code_str, config.AES_KEY, config.AES_IV)
     except Exception:
