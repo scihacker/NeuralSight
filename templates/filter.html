@@ -6,7 +6,6 @@
 <div class="content">
     <p>下面是卷积核的可视化列表。请点击相应的卷积核再耐心等待很长时间，再打开浏览器查看。</p>
     <p>Tag：{{ session['tag'] }}</p>
-    {% if session.has_key('image'): %}
     <div class="pure-menu pure-menu-open">
         <a class="pure-menu-heading">网络层列表</a>
         <ul>
@@ -20,7 +19,6 @@
             {% endfor %}
         </ul>
     </div>
-    {% endif %}
 </div>
 <script>
     $("li").on("click", function() {
