@@ -42,6 +42,7 @@ def compute_filter(model, layer_id, out_path, size=(224, 224)):
         last_loss_value, last_diff, stop_mult = 0, -np.inf, False
         for i in range(50):
             loss_value, grads_value = iterate([input_img_data, 0])
+            step = 1.
             input_img_data += grads_value * step
             if i == 1:
                 step *= 2
