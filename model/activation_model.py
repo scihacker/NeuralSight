@@ -12,11 +12,14 @@ def compute_activation(model, layer_id, image, out_path, size=(224, 224)):
     layer = model.layers[layer_id]
     f = function([model.input, K.learning_phase()], layer.output, on_unused_input='ignore')
     # hopefully this is a colored image
-    im = imread(image_path + image, mode='RGB') / 255.
+    im = imread(image_path + image, mode='L') / 255.
     print "im:", im.shape
     imsize = model.input_shape[2:4] if model.input_shape[2] and model.input_shape[3] else size
     im = imresize(im, imsize)
-    im = im.transpose(2, 0, 1)[np.newaxis, :]
+    if len(im.shape) == 3:
+        im = im.transpose(2, 0, 1)[np.newaxis, :]
+    else:
+        im = im[np.newaxis, np.newaxis, :]
     result = f(im, 0.)[0]
     os.mkdir(out_path)
     if len(result.shape) == 3:

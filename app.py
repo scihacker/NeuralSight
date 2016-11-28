@@ -136,4 +136,4 @@ def compute_activation():
     return jsonify({"error": 0, "path": out_path, "count": count, "msg": "ok"})
 
 if __name__ == "__main__":
-    app.run("localhost", port=8080, debug=True)
+    app.run(config.HOSTNAME, port=8080, debug=True)

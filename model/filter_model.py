@@ -42,7 +42,6 @@ def compute_filter(model, layer_id, out_path, size=(224, 224)):
         last_loss_value, last_diff, stop_mult = 0, -np.inf, False
         for i in range(50):
             loss_value, grads_value = iterate([input_img_data, 0])
-            step = 1.
             input_img_data += grads_value * step
             if i == 1:
                 step *= 2
@@ -59,15 +58,16 @@ def compute_filter(model, layer_id, out_path, size=(224, 224)):
             print('Current loss value:', loss_value, 'step:', step)
 
         img = deprocess_image(input_img_data[0])
+        plt.imsave(out_path + str(filter_index + 1) + ".png", img)
         filters.append((img, loss_value))
         print('Filter %d processed' % (filter_index))
-    for i in range(len(filters)):
-        plt.imsave(out_path + str(i + 1) + ".png", filters[i][0])
     with open(out_path + "ok", 'w') as f:
         f.write("ok")
 
 def compute_all_filter(model, out_path):
-    for i, layer in enumerate(model.layers):
+    a = list(enumerate(model.layers))
+    a.reverse()
+    for i, layer in a[9:]:
         if layer.__class__.__name__ == "BatchNormalization" or layer.__class__.__name__ == "Merge":
             print "Current:", i
             compute_filter(model, i, out_path + layer.name + "/")
