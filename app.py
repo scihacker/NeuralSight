@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*- 
 from flask import Flask
-from flask import render_template, session, request, jsonify, redirect
+from flask import render_template, session, request, jsonify
 from model import code_model, global_model, architecture_model, content_model, activation_model, filter_model
 import server_utils.secret.config as config
 import os
@@ -21,12 +21,12 @@ def code():
 @app.route('/structure')
 def structure():
     if not session.has_key('code'):
-        return render_template('error.html', page=1, exp=u"请在开始页面内使用Code！")
+        return render_template('error.html', page=1, exp=u"Please input code at the Get Started page.")
     path = content_model.get_architecture(session['code'])
     if not path:
         model = global_model.load_model(session['code'], session['data'])
         if not model:
-            return render_template('error.html', page=1, exp=u"文件路径有误，无法读取网络模型！")
+            return render_template('error.html', page=1, exp=u"The filepath is nonexistent.")
         path = content_model.get_path_by_code(session['code'], "structure") + "arch.png"
         architecture_model.output_architecture(model, out_path=path)
     return render_template('structure.html', png=path)
@@ -34,7 +34,7 @@ def structure():
 @app.route('/activation')
 def activation():
     if not session.has_key('code'):
-        return render_template('error.html', page=2, exp=u"请在开始页面内使用Code！")
+        return render_template('error.html', page=2, exp=u"Please input code at the Get Started page.")
     if session.has_key('image'):
         model = global_model.load_model(session['code'], session['data'])
         layers = model.layers
@@ -47,7 +47,7 @@ def activation():
 @app.route('/filter')
 def filter():
     if not session.has_key('code'):
-        return render_template('error.html', page=3, exp=u"请在开始页面内使用Code！")
+        return render_template('error.html', page=3, exp=u"Please input code at the Get Started page.")
     model = global_model.load_model(session['code'], session['data'])
     layers = model.layers
     out_layers = [[k, v.name, 0] for k, v in enumerate(layers)]

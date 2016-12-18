@@ -4,6 +4,9 @@ import os
 from keras import backend as K
 
 image_path = "./static/upload/"
+'''
+I copied A Keras Example of kernel visualization here. 
+'''
 def compute_filter(model, layer_id, out_path, size=(224, 224)):
     if os.path.exists(out_path + "ok"):
         return
@@ -31,7 +34,7 @@ def compute_filter(model, layer_id, out_path, size=(224, 224)):
     filters = []
     for filter_index in range(layer.output_shape[1]):
         layer_output = layer.output
-        loss = K.mean(layer_output[:, filter_index, :, :])
+        loss = K.mean(layer_output[:, filter_index])
         grads = K.gradients(loss, input_img)[0]
         grads = normalize(grads)
 
@@ -39,10 +42,11 @@ def compute_filter(model, layer_id, out_path, size=(224, 224)):
         step = 1.
         input_img_data = np.random.random((1, 3, im_width, im_height))
 
-        last_loss_value, last_diff, stop_mult = 0, -np.inf, False
+        # last_loss_value, last_diff, stop_mult = 0, -np.inf, False
         for i in range(50):
             loss_value, grads_value = iterate([input_img_data, 0])
             input_img_data += grads_value * step
+            """
             if i == 1:
                 step *= 2
             if i > 1 and not stop_mult:
@@ -55,6 +59,7 @@ def compute_filter(model, layer_id, out_path, size=(224, 224)):
             if i >= 1:
                 last_diff = loss_value - last_loss_value
             last_loss_value = loss_value
+            """
             print('Current loss value:', loss_value, 'step:', step)
 
         img = deprocess_image(input_img_data[0])
@@ -66,8 +71,7 @@ def compute_filter(model, layer_id, out_path, size=(224, 224)):
 
 def compute_all_filter(model, out_path):
     a = list(enumerate(model.layers))
-    a.reverse()
-    for i, layer in a[9:]:
-        if layer.__class__.__name__ == "BatchNormalization" or layer.__class__.__name__ == "Merge":
+    for i, layer in a:
+        if layer.__class__.__name__ == "Convolution2D":
             print "Current:", i
             compute_filter(model, i, out_path + layer.name + "/")

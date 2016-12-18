@@ -2,7 +2,6 @@ import sys
 sys.path.append("..")
 import model.code_model as code_model
 import secret.config as config
-import base64
 
 def main():
     if len(sys.argv) != 3:

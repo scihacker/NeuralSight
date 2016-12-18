@@ -1,23 +1,23 @@
 ﻿{% extends "main.html" %}
-{% block title %}响应可视化{% endblock %}
+{% block title %}Response{% endblock %}
 {% block code %}2{% endblock %}
-{% block header %}响应可视化{% endblock %}
+{% block header %}Response{% endblock %}
 {% block main %}
 <div class="content">
-    <p>下面是所有网络层的可视化图片，请先上传输入图像，并点击相应的层级来查看该层的所有响应图：</p>
-    <p>（在未来版本中将采用图片池的方法，以方便使用。另由于Theano的机制问题，中间结果无法获得，就使得每一层都必须求一遍结果，所以很慢）</p>
+    <p>The visualizations of responses from each layer are listed below. You can upload an image as input, and click each layer tab to expand all response images of that layer.</p>
+    <p>(It may be slow because of the low efficiency of Theano functions)</p>
     <form class="pure-form" id="form" enctype="multipart/form-data">
         <fieldset>
             <input id="file" name="file" type="file" accept="image/png,image/jpeg">
-            <label for="filename">或者粘贴文件名：</label>
+            <label for="filename">or paste the filename on the server here：</label>
             <input id="filename_input" type="text" name="file_name">
-            <input id="upload_file" type="button" class="pure-button pure-button-primary" value="确认">
+            <input id="upload_file" type="button" class="pure-button pure-button-primary" value="Confirm">
         </fieldset>
     </form>
     <p>Tag：{{ session['tag'] }} File: {{ session['image'] if session.has_key('image') else "Not Chosen"}}</p>
     {% if session.has_key('image'): %}
     <div class="pure-menu pure-menu-open">
-        <a class="pure-menu-heading">网络层列表</a>
+        <a class="pure-menu-heading">Layers</a>
         <ul>
             {% for layer in layers: %}
             <li id="layer{{ layer[0] }}" data-id="{{ layer[0] }}"{{ ' class=ready-layer' if layer[2] else '' }}><a href="#layer{{ layer[0] }}">{{ layer[1] }}</a></li>
@@ -47,7 +47,7 @@
                 contentType: false,
                 processData: false,
                 data: formData,
-                success: function(result) { if (result.error != 0) { alert("上传失败！"); return; } alert("上传成功！"); window.location.reload(); }
+                success: function(result) { if (result.error != 0) { alert("Upload Failed!"); return; } alert("Upload Successful!"); window.location.reload(); }
             });
         }
         else if ($("#filename_input").val() != "") {
@@ -55,7 +55,7 @@
                 url: "/upload_image",
                 type: "POST",
                 data: { file_name: $("#filename_input").val() },
-                success: function(result) { if (result.error != 0) { alert("文件名不正确！"); return; } alert("文件名已确认！"); window.location.reload(); }
+                success: function(result) { if (result.error != 0) { alert("File not found!"); return; } alert("Filename is confirmed!"); window.location.reload(); }
             });
         }
     });
@@ -70,7 +70,7 @@
             type: "POST",
             data: { id: $(this).attr("data-id") },
             success: function(result) { 
-                if (result.error != 0) { alert("更新输出失败！"); return; }
+                if (result.error != 0) { alert("Update Error!"); return; }
                 $this.addClass("ready-layer");
                 var dom = "";
                 if (result.count == 1) dom = "<img class='big-im' src='" + result.path + "1.png" + "'>";

@@ -11,10 +11,10 @@
     <div class="pure-menu pure-menu-open">
         <a class="pure-menu-heading" href="/">NeuralSight</a>
         <ul>
-            <li><a href="/code">开始</a></li>
-            <li><a href="/structure">网络结构</a></li>
-            <li><a href="/activation">响应可视化</a></li>
-            <li><a href="/filter">参数可视化</a></li>
+            <li><a href="/code">Get Started</a></li>
+            <li><a href="/structure">Architecture</a></li>
+            <li><a href="/activation">Response</a></li>
+            <li><a href="/filter">Kernels</a></li>
         </ul>
     </div>
 </div>
@@ -25,7 +25,6 @@
 {% block main%}{% endblock %}
 </div>
 <script>
-<!-- 页面渲染问题 -->
 $("#menu ul li:eq({% block code %}{% endblock %})").addClass("pure-menu-selected");
 </script>
 </body>

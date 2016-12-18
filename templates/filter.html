@@ -1,13 +1,13 @@
 ﻿{% extends "main.html" %}
-{% block title %}响应可视化{% endblock %}
+{% block title %}Convolution Kernels{% endblock %}
 {% block code %}3{% endblock %}
-{% block header %}响应可视化{% endblock %}
+{% block header %}Convolution Kernels{% endblock %}
 {% block main %}
 <div class="content">
-    <p>下面是卷积核的可视化列表。请点击相应的卷积核再耐心等待很长时间，再打开浏览器查看。</p>
+    <p>Convolution kernel visulizations are listed below. Click the tab and you can leave the page to wait as it usually takes a long time.</p>
     <p>Tag：{{ session['tag'] }}</p>
     <div class="pure-menu pure-menu-open">
-        <a class="pure-menu-heading">网络层列表</a>
+        <a class="pure-menu-heading">Kernels</a>
         <ul>
             {% for layer in layers: %}
             <li id="layer{{ layer[0] }}" data-id="{{ layer[0] }}"{{ ' class=ready-layer' if layer[2] == 1 else (' class=wait-layer' if layer[2] == 2 else '') }}><a href="#layer{{ layer[0] }}">{{ layer[1] }}</a></li>
@@ -35,7 +35,7 @@
             type: "POST",
             data: { id: $(this).attr("data-id") },
             success: function(result) { 
-                if (result.error != 0) { alert("申请失败！"); return; }
+                if (result.error != 0) { alert("Failed to compute the kernels."); return; }
                 $this.addClass("wait-layer");
             }
         });

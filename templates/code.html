@@ -1,11 +1,11 @@
 ﻿{% extends "main.html" %}
-{% block title %}开始{% endblock %}
+{% block title %}Get Started{% endblock %}
 {% block code %}0{% endblock %}
-{% block header %}开始{% endblock %}
+{% block header %}Get Started{% endblock %}
 {% block main %}
 <div class="content">
-    <p>要开始，请输入Code，或者在下面的列表中选取曾经使用过的Code。</p>
-    <p>请在使用结束后在本页上停止Code，以释放服务器内存。</p>
+    <p>To get started, input code here (Run generate_code.py on the server) or choose codes used before in the list below.</p>
+    <p>After visualizing the neural network, stop the use of code here to release memory for the model.</p>
     <form class="pure-form pure-form-stacked">
         <fieldset>
         <div class="pure-g">
@@ -18,14 +18,14 @@
                 <textarea id="code" type="text">{% if session.has_key("code"): %}{{ session['code'] }}{% endif %}</textarea>
             </div>
             <div id="use-button" class="pure-u-1 pure-u-md-1-2">
-                <button type="button" id="use" class="pure-button pure-button-primary">使用</button>
-                <button type="button" id="stop" class="pure-button pure-button-error">停止</button>
+                <button type="button" id="use" class="pure-button pure-button-primary">Use</button>
+                <button type="button" id="stop" class="pure-button pure-button-error">Stop</button>
             </div>
         </div>
         </fieldset>
     </form>
     <div class="pure-menu pure-menu-open">
-        <a class="pure-menu-heading">历史记录</a>
+        <a class="pure-menu-heading">History</a>
         <ul id="history-code">
             {% for code in history: %}
             <li><a href="#" data-code="{{ code[1] }}">{{ code[0] }}</a></li>
@@ -36,14 +36,14 @@
 <script>
     var use_code = function(tag, code) {
         $.post("/use_code", { tag: tag, code: code }, function(result) {
-            if (result.error != 0) alert("此Code不正确，请重新申请");
+            if (result.error != 0) alert("Invalid code. Please generate it again.");
             else window.location.reload();
         });
     };
     var stop_code = function() {
-        if (!confirm("确认停止此Code吗？")) return;
+        if (!confirm("Stop the code?")) return;
         $.post("/stop_code", {}, function(result) {
-            if (result.error != 0) alert("Code停止失败！");
+            if (result.error != 0) alert("Failed to stop code!");
             else window.location.reload();
         });
     };

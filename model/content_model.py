@@ -1,6 +1,5 @@
 import os
 from Crypto.Hash import SHA
-import base64
 
 content_path = "./static/content/"
 def folder_adapter(name):
